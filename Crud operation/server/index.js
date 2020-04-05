@@ -1,25 +1,39 @@
-const express = require('express');
-const server = express();
-const cors = require('cors');
+const expressServer = require('./routers'); // it will fetch the index.js file bydefault
+const mysqlCon = require('./utils/DbOperation');
 
-// const sql = require('./db');
-const { assignmentList } = require('./mockData');
-
-server.use(cors()); // server.use is used for accessing middleware functions.
-
-server.get("/url", (req, resp) => {
-    //console.log(req);
-    //console.log(['']);
-    const myArray = [{ id: 1, name: "vinay" }, { id: 2, name: "vinay2" }, { id: 3, name: "vinay3" }];
-    resp.send(myArray[0]);
-    //resp.send('api worked');
-});
-server.get("/assignment/list", (req, resp) => {
-    resp.send({ status: true, totalCount: assignmentList.length, results: assignmentList });
-    //resp.send('api worked');
-});
-server.listen(3010, () => {
+expressServer.listen(3010, () => {
     console.log('server started');
 })
-console.log('hello');
-// console.log('sql-', sql);
+
+// var sql = require("mssql");
+
+//     // config for your database
+//     var config = {
+//         user: 'sa',
+//         password: 'qss@2018',
+//         server: 'localhost', 
+//         database: 'demotest_vinay' 
+//     };
+
+//     // connect to your database
+//     sql.connect(config, function (err) {
+    
+//         if (err){
+//             console.log('-------------connection fialed------------',err);
+//         } else {
+//             console.log('db connection done!!!!!');
+//         }
+
+//         // // create Request object
+//         // var request = new sql.Request();
+           
+//         // // query to the database and get the records
+//         // request.query('select * from assignment ', function (err, recordset) {
+            
+//         //     if (err) console.log(err)
+
+//         //     // send records as a response
+//         //     // res.send(recordset);
+            
+//         // });
+//     });
