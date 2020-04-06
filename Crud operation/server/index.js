@@ -1,3 +1,4 @@
+// //====================== Connect to mySQL ==========================
 const expressServer = require('./routers'); // it will fetch the index.js file bydefault
 const mysqlCon = require('./utils/DbOperation');
 
@@ -5,14 +6,16 @@ expressServer.listen(3010, () => {
     console.log('server started');
 })
 
+// //=======================================================================
+// //====================== Connect to sql server ==========================
 // var sql = require("mssql");
 
 //     // config for your database
 //     var config = {
 //         user: 'sa',
-//         password: 'qss@2018',
-//         server: 'localhost', 
-//         database: 'demotest_vinay' 
+//         password: 'pulsar180',
+//         server: '192.168.1.101', 
+//         database: 'assignment_db' 
 //     };
 
 //     // connect to your database
@@ -24,16 +27,17 @@ expressServer.listen(3010, () => {
 //             console.log('db connection done!!!!!');
 //         }
 
-//         // // create Request object
-//         // var request = new sql.Request();
+//         // create Request object
+//         var request = new sql.Request();
            
-//         // // query to the database and get the records
-//         // request.query('select * from assignment ', function (err, recordset) {
+//         // query to the database and get the records
+//         request.query('select * from assignmentDetails ', function (err, recordset) {
             
-//         //     if (err) console.log(err)
+//             if (err) console.log(err)
 
-//         //     // send records as a response
-//         //     // res.send(recordset);
+//             // send records as a response
+//             // res.send(recordset);
+//             console.log(recordset);
             
-//         // });
+//         });
 //     });
