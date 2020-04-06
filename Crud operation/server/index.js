@@ -1,43 +1,13 @@
 // //====================== Connect to mySQL ==========================
 const expressServer = require('./routers'); // it will fetch the index.js file bydefault
-const mysqlCon = require('./utils/DbOperation');
+const { find, findById} = require('./utils/DbOperation');
 
 expressServer.listen(3010, () => {
     console.log('server started');
 })
 
-// //=======================================================================
-// //====================== Connect to sql server ==========================
-// var sql = require("mssql");
+const listAssignment = find('assignment').then(data=>data);
+const AssignmentById = findById('assignment',4).then(data=>data);
 
-//     // config for your database
-//     var config = {
-//         user: 'sa',
-//         password: 'pulsar180',
-//         server: '192.168.1.101', 
-//         database: 'assignment_db' 
-//     };
-
-//     // connect to your database
-//     sql.connect(config, function (err) {
-    
-//         if (err){
-//             console.log('-------------connection fialed------------',err);
-//         } else {
-//             console.log('db connection done!!!!!');
-//         }
-
-//         // create Request object
-//         var request = new sql.Request();
-           
-//         // query to the database and get the records
-//         request.query('select * from assignmentDetails ', function (err, recordset) {
-            
-//             if (err) console.log(err)
-
-//             // send records as a response
-//             // res.send(recordset);
-//             console.log(recordset);
-            
-//         });
-//     });
+console.log('index.js-listAssignment ', listAssignment);
+console.log('index.js-AssignmentById ',AssignmentById);
