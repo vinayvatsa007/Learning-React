@@ -5,6 +5,7 @@ const cors = require('cors');
 
 const assignment = require('./assignment');
 
+
 server.use(cors()); // server.use is used for accessing middleware functions.
 //assignments will be considered as assignment/list
 server.use('/assignments', assignment);
