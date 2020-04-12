@@ -2,11 +2,13 @@
 const express = require('express');
 const server = express();
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 const assignment = require('./assignment');
 
-
+server.use(bodyParser.json({extended:true}));
 server.use(cors()); // server.use is used for accessing middleware functions.
+
 //assignments will be considered as assignment/list
 server.use('/assignments', assignment);
 
