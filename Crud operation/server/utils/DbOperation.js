@@ -17,8 +17,7 @@ dbCon.connect((error) => {
 //call back method
 const find = (tableName) => {
     const query = `select * from ${tableName}`;
-    // although we passing 2nd param but its useless because query already framed through template string,
-    // but result will come if we pass the callback function as 3rd param
+    // although we passing 2nd param but its useless because query already framed through template string, // but result will come if we pass the callback function as 3rd param
     return dbCon.promise().query(query, tableName, (err, recordset) => err ? err : recordset);
 };
 
@@ -55,52 +54,25 @@ const getListById = (tableName, id) => {
     });
 };
 
-
 // via array params
 const insertRecord = (tableName, objRecord) => {
     const { keys, values } = getKeysAndValuesFromReqBody(objRecord);
-    // console.log('keys----', keys);
-    // console.log('values----', values);
     const query = `INSERT INTO  ${tableName}(${keys})
     values(?)`;
     return dbCon.promise().query(query, [values], (err, recordset) => {
+        if (err) {
+            console.log(err);
+        }
         return err ? err : recordset
     });
 };
 
-// via individual params
-// const insertRecord = ( id,subName, assignmentGivenByTeacher, section, assignmentDetails, dueDate) => {
-//     const query = `INSERT INTO  assignment(id,subName, assignmentGivenByTeacher, section, assignmentDetails, dueDate)
-//     values(?,?,?,?,?,?)`;
-//     return dbCon.promise().query(query, [id,subName, assignmentGivenByTeacher, section, assignmentDetails, dueDate], (err, recordset) => {
-//         return err ? err : recordset
-//     });
-// };
-
-// const updateRecord = (tableName, id, objRecord) => {
-//     const { keys, values } = getKeysAndValuesFromReqBody(objRecord);
-//     values.push(id); // values.push = id;
-//     // console.log('values----', values); console.log('pushed item value----', values[5]);    // console.log('keys----', keys);
-//     const query = `UPDATE ${tableName} SET subName =?, assignmentGivenByTeacher =?, section =?, assignmentDetails =?, dueDate =? WHERE id =?`;
-//     // const query = `UPDATE ${tableName} SET subName = '${values[0]}', assignmentGivenByTeacher = ${values[1]}, section = ${values[2]}, assignmentDetails = '${values[3]}', dueDate ='${values[4]}' WHERE id = ${values[5]}`;
-//     console.log('update query ---------', query);
-//     return dbCon.promise().query(query, values, (err, recordset) => {
-//         return err ? err : recordset
-//     });
-// };
-
 const updateRecord = (tableName, id, objRecord) => {
-    console.log('|||||||||||||||||||||| objRecord ||||||||||||||||||||||',objRecord);
+    // console.log('|||||||||||||||||||||| objRecord ||||||||||||||||||||||',objRecord);
     const { keys, values } = getKeysAndValuesFromReqBody(objRecord);
-    const updateString = getUpdateSrtingFromReqBody(objRecord);
-    console.log('dynamic stmt from  -getUpdateSrtingFromReqBody', updateString);
-
-    // values.push(id); // values.push = id;
-    // console.log('values----', values); console.log('pushed item value----', values[5]);    // console.log('keys----', keys);
-
+    const updateString = getUpdateSrtingFromReqBody(objRecord);     // console.log('update string returned by - getUpdateSrtingFromReqBody util method', updateString);
     const query = `UPDATE ${tableName} SET ${updateString} WHERE id =?`;
-    // const query = `UPDATE ${tableName} SET subName = '${values[0]}', assignmentGivenByTeacher = ${values[1]}, section = ${values[2]}, assignmentDetails = '${values[3]}', dueDate ='${values[4]}' WHERE id = ${values[5]}`;
-    console.log('update query ---------', query);
+    // console.log('update query ---------', query);
     return dbCon.promise().query(query, [id], (err, recordset) => {
         return err ? err : recordset
     });
@@ -113,5 +85,5 @@ const deleteRecord = (tableName, id) => {
         return err ? err : recordset
     });
 };
-module.exports = {  find, findById, getListById, insertRecord, deleteRecord, updateRecord }
+module.exports = { find, findById, getListById, insertRecord, deleteRecord, updateRecord }
 
