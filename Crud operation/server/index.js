@@ -7,10 +7,10 @@ expressServer.listen(3010, () => {
 })
 
 // const listAssignment = find('assignment').then(data=>{ // bcoz find is a promise thus result should be called as .then otherwise it will return promise not the data.
-//     console.log('listAssignment -',data[0]);
+//     console.log('listAssignment -',data);
 // });
 
-// const assignmentDetails = findById('assignment', 20).then(data=>{
+// const assignmentDetails = findById('assignment', 46).then(data=>{
 //     console.log(data[0]);
 // });
 
