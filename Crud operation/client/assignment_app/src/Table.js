@@ -7,6 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = theme => ({
     root: {
@@ -54,19 +55,18 @@ function SimpleTable(props) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {
-                    props.data.map(row => {
+                        {props.isLoading ? <CircularProgress/> : props.data.map(row => {
                         return (
-                            <TableRow key={row.subName}>
+                            <TableRow key={row.id}>
                                 <TableCell component="th" scope="row">{row.subName}</TableCell>
-                                <TableCell numeric>{row.assignmentGivenByTeacher.name}</TableCell>
-                                <TableCell numeric>{row.section.name}</TableCell>
+                                <TableCell numeric>{row.assignmentGivenByTeacher}</TableCell>
+                                <TableCell numeric>{row.section}</TableCell>
                                 <TableCell >{row.AssignmentDetails}</TableCell>
                                 <TableCell >{row.dueDate}</TableCell>
                             </TableRow>
                         );
-                    })
-                    }
+                    }) }
+                    
                 </TableBody>
             </Table>
         </Paper>

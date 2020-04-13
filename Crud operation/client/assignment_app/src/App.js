@@ -15,36 +15,46 @@ const TABLE_COLUMNS = [
 
 class App extends Component {
   state = {
-    searchText:'',
-    list: []
+    searchText: '',
+    list: [],
+    isLoading: true,
+    filteredList:[]
   };
 
   render() {
-    const { list, searchText } = this.state;
-    
-
-    console.log('from render list of assignments', list);
-    const filteredList = list.filter((li)=>{
-      return li.subName.toLowerCase().includes(searchText.toLowerCase());
-    });
+    const { list, searchText, isLoading, filteredList } = this.state;
     return (<div>
-      <input type = 'text' value ={searchText} onChange={(e)=> this.setState({searchText:e.target.value})} />
+      <input type='text' value={searchText} onChange={(e) => this.setState({ searchText: e.target.value })} />
       <Table
         columns={TABLE_COLUMNS}
         data={filteredList}
+        isLoading={isLoading}
       />
     </div>
-    
+
     )
 
   };
   componentDidMount() {
-    fetch('http://localhost:3010/assignment/list').then(res => res.json()).then(({ results }) => {
+    fetch('http://localhost:3010/assignments/').then(res => res.json()).then(({ results }) => {
       // console.log(results);
       // this.setState({list:data.results})
-      // console.log(results);
-      this.setState({ list: results });
+      console.log('data from api', results);
+      setTimeout(() => {
+        this.setState({ list: results, isLoading: false, filteredList:results });  
+      }, 3000);
+      
     });
   };
+ componentDidUpdate(prevProps, prevState){
+if(prevState.searchText!== this.state.searchText){
+    this.setState({filteredList:this.state.list.filter((li) => {
+      return li.subName.toLowerCase().startsWith(this.state.searchText.toLowerCase());
+    })
+  }); 
 }
+
+  };
+}
+
 export default App;
