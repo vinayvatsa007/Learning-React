@@ -1,6 +1,6 @@
 // will contain all db related functions, which can be shared among all files
 const mysql = require('mysql2');
-const config = { host: '192.168.1.7', user: 'root', password: 'pulsar180', database: 'assignment_db' }
+const config = { host: '192.168.1.9', user: 'root', password: 'pulsar180', database: 'assignment_db' }
 const { getKeysAndValuesFromReqBody, getUpdateSrtingFromReqBody } = require('./index');
 const Responses = require('./serverResponse');
 
@@ -33,15 +33,25 @@ dbCon.connect((error) => {
 //     });
 // };
 
-const find = async (tableName) => {
+const find = async (tableName, filters) => {
     try {
-        const query = `select * from ${tableName}`;
+
+        const {searchText:{key,value}} = filters;
+        
+        let query = `select * from ${tableName}`;
+        if(key && value){
+            query += ` where ${key} like '%${value}%' `;
+        }
+
+        console.log(query);
         // although we passing 2nd param but its useless because query already framed through template string, but result will come if we pass the callback function as 3rd param
         const [data, fields] = await dbCon.promise().query(query, tableName);
         // return 'hello'
         return new Responses.ListResponse(data);
     } catch (error) {
-        return new Responses.ErrorResponse(error);
+        throw new Responses.ErrorResponse(error);
+        // console.log('find->catch error thrown',error);
+        // throw error;
     }
 };
 

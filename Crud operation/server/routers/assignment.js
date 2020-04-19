@@ -1,16 +1,29 @@
 // table wise routers management i.e. for assignment - add/update/delete routes will be in this file
 // we will define all the routes here thus instead of entire express we just need the express.Router
+
 const router = require('express').Router();
+const asyncHandler = require('express-async-handler')
 const { find, findById, insertRecord, updateRecord, deleteRecord } = require('../utils/DbOperation');
 
 
 // if we write multiple routes then its mandatory to do resp.send otherwise it won't allow to go next API and will behave unexpectedly
-router.get('/', (req, resp) => {
+router.get('/', asyncHandler(async (req, resp) => {
+    // find('assignmentsss', req.query).then(data => { // bcoz find is a promise thus result should be called as .then otherwise it will return promise not the data.
+    //     resp.send(data);
+    // })
+    // .catch(error=> {throw error});
+    try {
     // resp.send('hello1');
-    find('assignment').then(data => { // bcoz find is a promise thus result should be called as .then otherwise it will return promise not the data.
-        resp.send(data);
-    });
-});
+    // console.log('req Params..........',req.params);
+    // console.log('req query..........',req.query);
+    const data = await find('assignment', req.query);
+    resp.send(data);    
+} catch (error) {
+    console.log('Assignment_Find_error_thrown',error)
+    throw error;
+}
+
+}));
 
 router.get('/:id', (req, resp) => {
     // resp.send('get by id' + req.params.id);

@@ -11,5 +11,10 @@ server.use(cors()); // server.use is used for accessing middleware functions.
 
 //assignments will be considered as assignment/list
 server.use('/assignments', assignment);
+//it runs as last and will definitely will have error if anywhere error is raised.
+server.use((error, req, resp, next)=>{
+    resp.status(500);
+    resp.send(error);
+});
 
 module.exports = server;

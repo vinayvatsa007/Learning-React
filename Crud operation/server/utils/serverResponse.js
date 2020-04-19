@@ -7,8 +7,10 @@ class ListResponse {
         // this.testProperty = 'vinay';
     }
 }
-class ErrorResponse {
+class ErrorResponse extends Error{
+    
     constructor(e) {
+        super();
         this.success = false;
         this.message = e.message;
     }
