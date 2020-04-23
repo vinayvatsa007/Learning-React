@@ -15,6 +15,7 @@ const TABLE_COLUMNS = [
   { name: "section" },
   { name: "assignmentDetails" },
   { name: "dueDate" },
+  { name: "action" },
 ];
 
 // const styles = (theme) => ({
@@ -40,7 +41,8 @@ class Assignments extends Component {
     assignmentGivenByTeacher: 0,
     section: 0,
     assignmentDetails: "",
-    dueDate: new Date().toISOString().split("T")[0], //'2020-04-01'
+    dueDate: new Date().toISOString().split("T")[0], //'2020-04-01',
+    // id: 0,
   };
 
   state = {
@@ -56,13 +58,31 @@ class Assignments extends Component {
     console.log("Create Button clicked");
     this.setState({ isFormOpen: true });
   };
+
   onCloseAssignmentForm = () => {
     console.log("Close Button clicked");
     this.setState({ isFormOpen: false });
   };
-  onSubmitAssignmentDetails = () => {
-    console.log("SubmitAssignmentDetails clicked");
-    this.setState({ isFormOpen: false });
+  onSubmitAssignmentDetails = async (id = 0) => {
+    const { myAssignment } = this.state;
+    // console.log("SubmitAssignmentDetails clicked----", myAssignment);
+    try {
+      if (id) {
+        const result = await assignmentService.insertRecord(myAssignment);
+        if (result.success) {
+          console.log("Record inserted at id = ", result.id);
+        }
+      } else {
+        const result = await assignmentService.updateRecord(myAssignment);
+        if (result.success) {
+          console.log("Record inserted at id = ", result.id);
+        }
+      }
+
+      this.setState({ isFormOpen: false });
+    } catch (error) {
+      alert("save failed...");
+    }
   };
   onChangeField = (e) => {
     console.log(e.target.value, "event");
@@ -89,6 +109,11 @@ class Assignments extends Component {
     //   this.state.myAssignment.subName
     // );
   };
+  onEditClickHandler(id) {
+    // alert(id);
+    console.log(id);
+    this.setState({ isFormOpen: true });
+  }
 
   render() {
     const {
@@ -124,10 +149,12 @@ class Assignments extends Component {
           columns={TABLE_COLUMNS}
           data={filteredList}
           isLoading={isLoading}
+          onEditClickHandler={this.onEditClickHandler}
         />
         <AssignmentForm
           open={isFormOpen}
           onClose={this.onCloseAssignmentForm}
+          onSave={this.onSubmitAssignmentDetails}
           title="Add Assignment"
           formContent="This is my first form"
         >
@@ -139,7 +166,7 @@ class Assignments extends Component {
             fullWidth
             value={subName}
             name="subName"
-            onBlur={this.onChangeField}
+            onChange={this.onChangeField}
           />
           <TextField
             autoFocus
@@ -149,7 +176,7 @@ class Assignments extends Component {
             fullWidth
             value={assignmentGivenByTeacher}
             name="assignmentGivenByTeacher"
-            onBlur={this.onChangeField}
+            onChange={this.onChangeField}
           />
           <TextField
             autoFocus
@@ -159,7 +186,7 @@ class Assignments extends Component {
             fullWidth
             value={section}
             name="section"
-            onBlur={this.onChangeField}
+            onChange={this.onChangeField}
           />
           <TextField
             autoFocus
@@ -169,7 +196,7 @@ class Assignments extends Component {
             fullWidth
             value={assignmentDetails}
             name="assignmentDetails"
-            onBlur={this.onChangeField}
+            onChange={this.onChangeField}
           />
           <TextField
             autoFocus
@@ -179,7 +206,7 @@ class Assignments extends Component {
             fullWidth
             value={dueDate}
             name="dueDate"
-            onBlur={this.onChangeField}
+            onChange={this.onChangeField}
           />
         </AssignmentForm>
       </div>

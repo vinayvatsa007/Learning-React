@@ -36,14 +36,14 @@ const styles = (theme) => ({
 // ];
 
 function SimpleTable(props) {
-  const { classes } = props;
+  const { classes, columns, isLoading, data, onEditClickHandler } = props;
 
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            {props.columns.map((col) => {
+            {columns.map((col) => {
               return <TableCell>{col.name.toUpperCase()}</TableCell>;
             })}
             {/* <TableCell>Dessert (100g serving)</TableCell>
@@ -54,10 +54,10 @@ function SimpleTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.isLoading ? (
+          {isLoading ? (
             <CircularProgress />
           ) : (
-            props.data.map((row) => {
+            data.map((row) => {
               return (
                 <TableRow key={row.id}>
                   <TableCell component="th" scope="row">
@@ -67,6 +67,14 @@ function SimpleTable(props) {
                   <TableCell numeric>{row.section}</TableCell>
                   <TableCell>{row.AssignmentDetails}</TableCell>
                   <TableCell>{row.dueDate}</TableCell>
+                  <TableCell>
+                    <input
+                      type="button"
+                      value="edit"
+                      id={row.id}
+                      onClick={() => onEditClickHandler(row.id)}
+                    />
+                  </TableCell>
                 </TableRow>
               );
             })

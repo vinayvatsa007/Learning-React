@@ -8,17 +8,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
 export default function Form(props) {
-  //   const [open, setOpen] = React.useState(false);
-  const { open, onClose } = props;
-
-  //   const handleClickOpen = () => {
-  //     setOpen(true);
-  //   };
-
-  //   const handleClose = () => {
-  //     setOpen(false);
-  //   };
-
+  const { open, onClose, onSave } = props;
   return (
     <div>
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
@@ -33,8 +23,8 @@ export default function Form(props) {
           <Button onClick={onClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={onClose} color="primary">
-            Subscribe
+          <Button onClick={onSave} color="primary">
+            Save
           </Button>
         </DialogActions>
       </Dialog>
