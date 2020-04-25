@@ -52,41 +52,69 @@ class Assignments extends Component {
     filteredList: [],
     isFormOpen: false,
     myAssignment: this.objAssignment,
+    editMode: false,
+    editRecordId: 0,
   };
   // render is also a method of class, similarly all respective event handler methods part of class thus defined outside render func
   onClickCreateAssignment = () => {
     console.log("Create Button clicked");
-    this.setState({ isFormOpen: true });
+    this.setState({ isFormOpen: true, editMode: false });
   };
 
+  getAssignmentRecordById = (id) => {
+    const assignmentList = this.state.list;
+    const { myAssignment } = this.state;
+    // console.log(assignmentList);
+    const assignmentRecordById = assignmentList.filter((record) => {
+      if (record.id == id) {
+        return record;
+      }
+    });
+    // console.log("edited record", assignmentRecordById);
+    this.setState({ myAssignment: assignmentRecordById[0] });
+    // this.setState({ myAssignment: assignmentRecordById[0] }, () => {
+    //   console.log("updated state on edit", this.state.myAssignment);
+    // });
+  };
+  onEditClickHandler = (id) => {
+    console.log(id);
+
+    this.setState({ isFormOpen: true, editMode: true, editRecordId: id }, () =>
+      console.log("onEditClickHandler logging state details----", this.state)
+    );
+    this.getAssignmentRecordById(id);
+  };
   onCloseAssignmentForm = () => {
     console.log("Close Button clicked");
     this.setState({ isFormOpen: false });
   };
+
   onSubmitAssignmentDetails = async (id = 0) => {
     const { myAssignment } = this.state;
     // console.log("SubmitAssignmentDetails clicked----", myAssignment);
     try {
       if (id) {
-        const result = await assignmentService.insertRecord(myAssignment);
+        console.log("update method called with id =", id);
+        const result = await assignmentService.updateRecord(myAssignment, id);
         if (result.success) {
           console.log("Record inserted at id = ", result.id);
         }
       } else {
-        const result = await assignmentService.updateRecord(myAssignment);
+        console.log("insert method called with id =", id);
+        const result = await assignmentService.insertRecord(myAssignment);
         if (result.success) {
           console.log("Record inserted at id = ", result.id);
         }
       }
-
-      this.setState({ isFormOpen: false });
+      // reset state to default for editMode and editRecordId
+      this.setState({ isFormOpen: false, editMode: false, editRecordId: 0 });
     } catch (error) {
       alert("save failed...");
     }
   };
   onChangeField = (e) => {
-    console.log(e.target.value, "event");
-    console.log(e.target.name, "event");
+    // console.log(e.target.value, "event");
+    // console.log(e.target.name, "event");
     let myAssignment = this.state.myAssignment;
     const { name, value } = e.target;
     myAssignment[name] = value;
@@ -97,7 +125,10 @@ class Assignments extends Component {
     // }
 
     this.setState({ myAssignment }, () => {
-      console.log("updated state", this.state.myAssignment);
+      console.log(
+        "updated state from onChangeField=>",
+        this.state.myAssignment
+      );
     });
     // let varName = `myAssignment.${e.target.name}:'${e.target.value}'`;
     // console.log(varName);
@@ -109,11 +140,6 @@ class Assignments extends Component {
     //   this.state.myAssignment.subName
     // );
   };
-  onEditClickHandler(id) {
-    // alert(id);
-    console.log(id);
-    this.setState({ isFormOpen: true });
-  }
 
   render() {
     const {
@@ -131,7 +157,7 @@ class Assignments extends Component {
       dueDate,
     } = myAssignment;
     const { classes } = this.props;
-    console.log("state details-------", this.state);
+    // console.log("state details-------", this.state);
     return (
       <div style={{ padding: 15, width: "90%" }}>
         <input
@@ -155,6 +181,7 @@ class Assignments extends Component {
           open={isFormOpen}
           onClose={this.onCloseAssignmentForm}
           onSave={this.onSubmitAssignmentDetails}
+          id={this.state.editRecordId}
           title="Add Assignment"
           formContent="This is my first form"
         >

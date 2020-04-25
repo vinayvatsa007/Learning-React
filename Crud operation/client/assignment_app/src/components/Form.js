@@ -8,7 +8,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
 export default function Form(props) {
-  const { open, onClose, onSave } = props;
+  const { open, onClose, onSave, id } = props;
   return (
     <div>
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
@@ -23,7 +23,7 @@ export default function Form(props) {
           <Button onClick={onClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={onSave} color="primary">
+          <Button onClick={() => onSave(id)} color="primary">
             Save
           </Button>
         </DialogActions>

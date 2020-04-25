@@ -72,7 +72,14 @@ function SimpleTable(props) {
                       type="button"
                       value="edit"
                       id={row.id}
-                      onClick={() => onEditClickHandler(row.id)}
+                      // onClick={onEditClickHandler({row.id})}
+                      //wrong onClick={(id = row.id) => onEditClickHandler(id)}
+                      //correct way ----- onClick={() => onEditClickHandler(row.id)}
+                      // because this callback is an event handler not simple call back it will take only e as input param nothing else as shown below
+                      onClick={(e) => {
+                        // console.log("e.target-------", e.target);
+                        onEditClickHandler(row.id);
+                      }}
                     />
                   </TableCell>
                 </TableRow>

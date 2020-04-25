@@ -40,13 +40,15 @@ class BaseService {
       // new Error({message:error.message, status:error.status})
     }
   };
-  updateRecord = async (requestBody) => {
+  updateRecord = async (requestBody, id) => {
     try {
-      const resp = await request.post(this.getUrl("update")).send(requestBody);
-      console.log("find method results ---", resp);
+      const resp = await request
+        .put(this.getUrl(`update/${id}`))
+        .send(requestBody);
+      console.log("updateRecord=>find method results ---", resp);
       return resp.body;
     } catch (error) {
-      console.log("Error_from_BaseService.js", error);
+      console.log("updateRecord=>Error_from_BaseService.js", error);
       throw error;
       // new Error({message:error.message, status:error.status})
     }
