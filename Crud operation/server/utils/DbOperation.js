@@ -1,7 +1,7 @@
 // will contain all db related functions, which can be shared among all files
 const mysql = require("mysql2");
 const config = {
-  host: "192.168.1.7",
+  host: "192.168.1.107",
   user: "root",
   password: "pulsar180",
   database: "assignment_db",
@@ -52,7 +52,7 @@ const find = async (tableName, filters) => {
       query += ` where ${key} like '%${value}%' `;
     }
 
-    console.log(query);
+    // console.log(query);
     // although we passing 2nd param but its useless because query already framed through template string, but result will come if we pass the callback function as 3rd param
     const [data, fields] = await dbCon.promise().query(query, tableName);
     // return 'hello'
@@ -158,7 +158,7 @@ const deleteRecord = async (tableName, id) => {
   try {
     const query = `DELETE FROM ${tableName} WHERE id = ?`;
     const [data, fields] = await dbCon.promise().query(query, id);
-
+    // console.log(data);
     return data["affectedRows"]
       ? new Responses.DeleteResponse("Record deleted successfully!")
       : new Responses.ErrorResponse({ message: "No record found to delete!!" });

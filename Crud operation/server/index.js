@@ -1,13 +1,21 @@
 // //====================== Connect to mySQL ==========================
-const expressServer = require('./routers'); // it will fetch the index.js file bydefault
-const { find, findById, insertRecord, deleteRecord, updateRecord } = require('./utils/DbOperation');
+const expressServer = require("./routers"); // it will fetch the index.js file bydefault
+const {
+  find,
+  findById,
+  insertRecord,
+  deleteRecord,
+  updateRecord,
+} = require("./utils/DbOperation");
 
 expressServer.listen(3010, () => {
-    console.log('server started');
-})
+  console.log("server started..");
+});
 
-// const listAssignment = find('assignment').then(data=>{ // bcoz find is a promise thus result should be called as .then otherwise it will return promise not the data.
-//     console.log('listAssignment -',data);
+// let searchText = { key: "subName", value: "post" };
+// const listAssignment = find("assignment", { searchText }).then((data) => {
+//   // bcoz find is a promise thus result should be called as .then otherwise it will return promise not the data.
+//   console.log("listAssignment -", data);
 // });
 
 // const assignmentDetails = findById('assignment', 46).then(data=>{
@@ -29,7 +37,6 @@ expressServer.listen(3010, () => {
 //     //     console.log('----------------Assignment.findById------------\n',data[0]);
 //     // });
 // });
-
 
 // const updateAssignmentDetails = updateRecord('assignment',13,objAssignment).then(data => {
 //     const affectedRows = data[0]['affectedRows'];

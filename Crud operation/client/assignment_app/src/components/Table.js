@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+// import {useState} from React;
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -8,6 +9,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Actions from "./Actions";
+import ConfirmationDialog from "./Dialog";
 
 const styles = (theme) => ({
   root: {
@@ -21,22 +24,39 @@ const styles = (theme) => ({
   },
 });
 
-// let id = 0;
-// function createData(name, calories, fat, carbs, protein) {
-//     id += 1;
-//     return { id, name, calories, fat, carbs, protein };
-// }
-
-// const rows = [
-//     createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-//     createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-//     createData('Eclair', 262, 16.0, 24, 6.0),
-//     createData('Cupcake', 305, 3.7, 67, 4.3),
-//     createData('Gingerbread', 356, 16.0, 49, 3.9),
-// ];
-
 function SimpleTable(props) {
-  const { classes, columns, isLoading, data, onEditClickHandler } = props;
+  const {
+    classes,
+    columns,
+    isLoading,
+    data,
+    onEditClickHandler,
+    onDeleteClickHandler,
+    confirmationDialogContent,
+    confirmationDialogTitle,
+  } = props;
+  // use state returns 2 things 1. the value 2nd the setter func which will take true/false in our case.
+  const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState(
+    false
+  );
+  const [currentRecord, setCurrentRecord] = useState(null);
+
+  const onCancelConfirmationDialog = () => {
+    console.log("onCancelConfirmationDialog is called");
+    //on cancel reset everything
+    setIsConfirmationDialogOpen(false);
+    setCurrentRecord(null);
+  };
+
+  const onOkConfirmationDialog = () => {
+    console.log("onOkConfirmationDialog is called...");
+    setIsConfirmationDialogOpen(false);
+    onDeleteClickHandler(currentRecord);
+  };
+  const handleDelete = (id) => {
+    setIsConfirmationDialogOpen(true);
+    setCurrentRecord(id);
+  };
 
   return (
     <Paper className={classes.root}>
@@ -46,11 +66,6 @@ function SimpleTable(props) {
             {columns.map((col) => {
               return <TableCell>{col.name.toUpperCase()}</TableCell>;
             })}
-            {/* <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell numeric>Calories</TableCell>
-            <TableCell numeric>Fat (g)</TableCell>
-            <TableCell numeric>Carbs (g)</TableCell>
-            <TableCell numeric>Protein (g)</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -60,6 +75,7 @@ function SimpleTable(props) {
             data.map((row) => {
               return (
                 <TableRow key={row.id}>
+                  <TableCell numeric>{row.id}</TableCell>
                   <TableCell component="th" scope="row">
                     {row.subName}
                   </TableCell>
@@ -68,18 +84,19 @@ function SimpleTable(props) {
                   <TableCell>{row.AssignmentDetails}</TableCell>
                   <TableCell>{row.dueDate}</TableCell>
                   <TableCell>
-                    <input
+                    {/* <input
                       type="button"
                       value="edit"
                       id={row.id}
-                      // onClick={onEditClickHandler({row.id})}
-                      //wrong onClick={(id = row.id) => onEditClickHandler(id)}
-                      //correct way ----- onClick={() => onEditClickHandler(row.id)}
-                      // because this callback is an event handler not simple call back it will take only e as input param nothing else as shown below
                       onClick={(e) => {
-                        // console.log("e.target-------", e.target);
-                        onEditClickHandler(row.id);
+                        onEditClickHandler(row);
                       }}
+                    /> */}
+                    <Actions
+                      record={row}
+                      onEdit={onEditClickHandler}
+                      onDelete={handleDelete}
+                      deleteRecordId={row.id}
                     />
                   </TableCell>
                 </TableRow>
@@ -88,6 +105,14 @@ function SimpleTable(props) {
           )}
         </TableBody>
       </Table>
+      <ConfirmationDialog
+        open={isConfirmationDialogOpen}
+        // open={true}
+        handleCancel={onCancelConfirmationDialog}
+        handleOk={onOkConfirmationDialog}
+        content={confirmationDialogContent}
+        title={confirmationDialogTitle}
+      />
     </Paper>
   );
 }

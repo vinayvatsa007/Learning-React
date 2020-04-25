@@ -20,8 +20,10 @@ class BaseService {
   //const filters
   find = async (filters) => {
     try {
+      //Node Services hosting URL ---- http://localhost:3010/
+      // route=> assignments/
       const resp = await request.get(this.getUrl()).query(filters);
-      console.log("find method results ---", resp);
+      // console.log("find method results ---", resp);
       return resp.body;
     } catch (error) {
       console.log("Error_from_BaseService.js", error);
@@ -29,6 +31,8 @@ class BaseService {
       // new Error({message:error.message, status:error.status})
     }
   };
+  //Node Services hosting URL ---- http://localhost:3010/
+  // route=> add/
   insertRecord = async (requestBody) => {
     try {
       const resp = await request.post(this.getUrl("add")).send(requestBody);
@@ -40,6 +44,8 @@ class BaseService {
       // new Error({message:error.message, status:error.status})
     }
   };
+  //Node Services hosting URL ---- http://localhost:3010/
+  // route=> update/:id -----http://localhost:3010/assignments/update/46
   updateRecord = async (requestBody, id) => {
     try {
       const resp = await request
@@ -50,7 +56,22 @@ class BaseService {
     } catch (error) {
       console.log("updateRecord=>Error_from_BaseService.js", error);
       throw error;
-      // new Error({message:error.message, status:error.status})
+    }
+  };
+  //Node Services hosting URL ---- http://localhost:3010/
+  // route=> delete/:id--- http://localhost:3010/assignments/delete/50
+  deleteRecord = async (id) => {
+    try {
+      const resp = await request
+        .delete(this.getUrl(`delete/${id}`))
+        // .send(requestBody);
+        //.send({ id: id });  //----- it will also work.
+        .send(id); // we don't have req body here but just the id thus we just need to request.send(id)
+      console.log("deleteRecord=> method results ---", resp);
+      return resp.body;
+    } catch (error) {
+      console.log("deleteRecord=>Error_from_BaseService.js", error);
+      throw error;
     }
   };
 }

@@ -10,6 +10,7 @@ import TextField from "@material-ui/core/TextField";
 const assignmentService = new AssignmentService();
 
 const TABLE_COLUMNS = [
+  { name: "id" },
   { name: "subName" },
   { name: "assignmentGivenByTeacher" },
   { name: "section" },
@@ -18,12 +19,6 @@ const TABLE_COLUMNS = [
   { name: "action" },
 ];
 
-// const styles = (theme) => ({
-//     button: {
-//     background: "primary",
-//     color: "secondary",
-//   },
-// });
 const styles = (theme) => {
   console.log("logging theme value", theme);
   return {
@@ -57,7 +52,7 @@ class Assignments extends Component {
   };
   // render is also a method of class, similarly all respective event handler methods part of class thus defined outside render func
   onClickCreateAssignment = () => {
-    console.log("Create Button clicked");
+    // console.log("Create Button clicked");
     this.setState({ isFormOpen: true, editMode: false });
   };
 
@@ -76,17 +71,37 @@ class Assignments extends Component {
     //   console.log("updated state on edit", this.state.myAssignment);
     // });
   };
-  onEditClickHandler = (id) => {
-    console.log(id);
+  onEditClickHandler = (record) => {
+    console.log(record);
 
-    this.setState({ isFormOpen: true, editMode: true, editRecordId: id }, () =>
-      console.log("onEditClickHandler logging state details----", this.state)
+    this.setState(
+      { isFormOpen: true, editMode: true, editRecordId: record.id },
+      () =>
+        console.log("onEditClickHandler logging state details----", this.state)
     );
-    this.getAssignmentRecordById(id);
+    this.getAssignmentRecordById(record.id);
+  };
+  onDeleteClickHandler = async (id) => {
+    console.log("deleting record id =>", id);
+    if (id) {
+      const result = await assignmentService.deleteRecord(id);
+      if (result.success) {
+        console.log("Record deleted at id = ", result);
+        this.getAssignmentList();
+      } else {
+        console.log("Delete operation failed details = ", result);
+      }
+    }
   };
   onCloseAssignmentForm = () => {
     console.log("Close Button clicked");
-    this.setState({ isFormOpen: false });
+    //resetting to default values on cancel click
+    this.setState({
+      isFormOpen: false,
+      editMode: false,
+      editRecordId: 0,
+      myAssignment: this.objAssignment,
+    });
   };
 
   onSubmitAssignmentDetails = async (id = 0) => {
@@ -97,7 +112,7 @@ class Assignments extends Component {
         console.log("update method called with id =", id);
         const result = await assignmentService.updateRecord(myAssignment, id);
         if (result.success) {
-          console.log("Record inserted at id = ", result.id);
+          console.log("Record updated at id = ", result.id);
         }
       } else {
         console.log("insert method called with id =", id);
@@ -107,7 +122,12 @@ class Assignments extends Component {
         }
       }
       // reset state to default for editMode and editRecordId
-      this.setState({ isFormOpen: false, editMode: false, editRecordId: 0 });
+      this.setState({
+        isFormOpen: false,
+        editMode: false,
+        editRecordId: 0,
+        myAssignment: this.objAssignment,
+      });
     } catch (error) {
       alert("save failed...");
     }
@@ -118,29 +138,18 @@ class Assignments extends Component {
     let myAssignment = this.state.myAssignment;
     const { name, value } = e.target;
     myAssignment[name] = value;
-    // if (name == "dueDate" && !value) {
-    //   myAssignment[name] = new Date().toISOString().split("T")[0];
-    // } else {
-    //   myAssignment[name] = value;
-    // }
-
     this.setState({ myAssignment }, () => {
       console.log(
         "updated state from onChangeField=>",
         this.state.myAssignment
       );
     });
-    // let varName = `myAssignment.${e.target.name}:'${e.target.value}'`;
-    // console.log(varName);
-    // this.setState(() => {
-    //   return { myAssignment: { varName } };
-    // });
-    // console.log(
-    //   "from updated state===========",
-    //   this.state.myAssignment.subName
-    // );
   };
-
+  getAssignmentList = async () => {
+    let searchText = { key: "subName", value: this.state.searchText };
+    const { results } = await assignmentService.find({ searchText });
+    this.setState({ list: results, isLoading: false, filteredList: results });
+  };
   render() {
     const {
       searchText,
@@ -176,6 +185,9 @@ class Assignments extends Component {
           data={filteredList}
           isLoading={isLoading}
           onEditClickHandler={this.onEditClickHandler}
+          onDeleteClickHandler={this.onDeleteClickHandler}
+          confirmationDialogContent={"Are you confirm to delete?"}
+          confirmationDialogTitle={"Delete assignment confirmation"}
         />
         <AssignmentForm
           open={isFormOpen}
@@ -240,17 +252,6 @@ class Assignments extends Component {
     );
   }
   async componentDidMount() {
-    // // under js engine VS8 its a default method available no separate import required. similar to console
-    // // for ajax calling
-    // fetch('http://localhost:3010/assignments/').then(res => res.json()).then(({ results }) => {
-    //   // console.log(results);
-    //   // this.setState({list:data.results})
-    //   console.log('data from api', results);
-    //   setTimeout(() => {
-    //     this.setState({ list: results, isLoading: false, filteredList:results });
-    //   }, 3000);
-
-    // });
     try {
       let searchText = { key: "subName", value: "" };
       const { results } = await assignmentService.find({ searchText });
@@ -265,9 +266,7 @@ class Assignments extends Component {
   }
   async componentDidUpdate(prevProps, prevState) {
     if (prevState.searchText !== this.state.searchText) {
-      let searchText = { key: "subName", value: this.state.searchText };
-      const { results } = await assignmentService.find({ searchText });
-      this.setState({ list: results, isLoading: false, filteredList: results });
+      this.getAssignmentList();
     }
   }
 
