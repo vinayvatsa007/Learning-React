@@ -83,6 +83,7 @@ function SimpleTable(props) {
                   <TableCell numeric>{row.section}</TableCell>
                   <TableCell>{row.AssignmentDetails}</TableCell>
                   <TableCell>{row.dueDate}</TableCell>
+
                   <TableCell>
                     {/* <input
                       type="button"

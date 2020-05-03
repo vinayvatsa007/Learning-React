@@ -5,7 +5,9 @@ import { Button } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import AssignmentService from "../../services/Assignment";
 import AssignmentForm from "../../components/Form";
-import TextField from "@material-ui/core/TextField";
+// import TextField from "@material-ui/core/TextField";
+import TextField from "../../components/TextField";
+import DatePicker from "../../components/DatePicker";
 
 const assignmentService = new AssignmentService();
 
@@ -132,11 +134,8 @@ class Assignments extends Component {
       alert("save failed...");
     }
   };
-  onChangeField = (e) => {
-    // console.log(e.target.value, "event");
-    // console.log(e.target.name, "event");
+  onChangeField = (name, value) => {
     let myAssignment = this.state.myAssignment;
-    const { name, value } = e.target;
     myAssignment[name] = value;
     this.setState({ myAssignment }, () => {
       console.log(
@@ -237,7 +236,7 @@ class Assignments extends Component {
             name="assignmentDetails"
             onChange={this.onChangeField}
           />
-          <TextField
+          {/* <TextField
             autoFocus
             margin="dense"
             label="Due Date"
@@ -246,6 +245,21 @@ class Assignments extends Component {
             value={dueDate}
             name="dueDate"
             onChange={this.onChangeField}
+          /> */}
+          <DatePicker
+            disableToolbar={false}
+            variant="" // pass inline for inline datepicker
+            id="date"
+            label="Due Date"
+            name="dueDate"
+            format="yyyy-MM-dd"
+            // type="date"
+            value={dueDate}
+            onChange={this.onChangeField}
+            // className={classes.textField}
+            // InputLabelProps={{
+            //   shrink: true,
+            // }}
           />
         </AssignmentForm>
       </div>

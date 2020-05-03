@@ -1,7 +1,7 @@
 // will contain all db related functions, which can be shared among all files
 const mysql = require("mysql2");
 const config = {
-  host: "192.168.1.107",
+  host: "192.168.1.103",
   user: "root",
   password: "pulsar180",
   database: "assignment_db",
