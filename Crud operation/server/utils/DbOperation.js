@@ -4,7 +4,7 @@ const config = {
   host: "192.168.1.103",
   user: "root",
   password: "pulsar180",
-  database: "assignment_db",
+  database: "schoolmanagement_db",
 };
 const {
   getKeysAndValuesFromReqBody,
@@ -43,9 +43,7 @@ dbCon.connect((error) => {
 
 const find = async (tableName, filters) => {
   try {
-    const {
-      searchText: { key, value },
-    } = filters;
+    const { searchText: { key, value } = {} } = filters;
 
     let query = `select * from ${tableName}`;
     if (key && value) {
