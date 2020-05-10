@@ -75,7 +75,6 @@ class Assignments extends Component {
   };
   onEditClickHandler = (record) => {
     console.log(record);
-
     this.setState(
       { isFormOpen: true, editMode: true, editRecordId: record.id },
       () =>

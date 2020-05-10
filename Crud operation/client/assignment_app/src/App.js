@@ -4,11 +4,12 @@ import React, { Component } from "react";
 import "./App.css";
 // import { string } from 'prop-types';
 // import { Tab } from '@material-ui/core';
-import Assignments from "./containers/Assignments/Assignments";
+// import Assignments from "./containers/Assignments/Assignments";
+import Student from "./containers/Students/Student";
 
 class App extends Component {
   render() {
-    return <Assignments />;
+    return <Student />;
   }
 }
 export default App;

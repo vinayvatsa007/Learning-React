@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 // import {useState} from React;
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
@@ -15,7 +15,7 @@ import ConfirmationDialog from "./Dialog";
 const styles = (theme) => ({
   root: {
     width: "100%",
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
     overflowX: "auto",
   },
   table: {
@@ -40,7 +40,7 @@ function SimpleTable(props) {
     false
   );
   const [currentRecord, setCurrentRecord] = useState(null);
-
+  let [finalConfirmationMessage, setFinalConfirmationMessage] = useState([]);
   const onCancelConfirmationDialog = () => {
     console.log("onCancelConfirmationDialog is called");
     //on cancel reset everything
@@ -53,7 +53,18 @@ function SimpleTable(props) {
     setIsConfirmationDialogOpen(false);
     onDeleteClickHandler(currentRecord);
   };
+  // let finalConfirmationMessage = "vinay";
   const handleDelete = (id) => {
+    setFinalConfirmationMessage(
+      // use fragment to wrap muti items
+      // <Fragment>
+      //   {confirmationDialogContent}
+      //   <br />
+      //   {id}
+      // </Fragment>
+      //2 ways of doing this. either send values as array and while showing final content on diaolog component then render via map or use fragment to wrap muti items
+      [confirmationDialogContent, <br />, id]
+    );
     setIsConfirmationDialogOpen(true);
     setCurrentRecord(id);
   };
@@ -64,7 +75,9 @@ function SimpleTable(props) {
         <TableHead>
           <TableRow>
             {columns.map((col) => {
-              return <TableCell>{col.name.toUpperCase()}</TableCell>;
+              return (
+                <TableCell key={col.name}>{col.name.toUpperCase()}</TableCell>
+              );
             })}
           </TableRow>
         </TableHead>
@@ -75,24 +88,19 @@ function SimpleTable(props) {
             data.map((row) => {
               return (
                 <TableRow key={row.id}>
-                  <TableCell numeric>{row.id}</TableCell>
-                  <TableCell component="th" scope="row">
-                    {row.subName}
-                  </TableCell>
-                  <TableCell numeric>{row.assignmentGivenByTeacher}</TableCell>
-                  <TableCell numeric>{row.section}</TableCell>
-                  <TableCell>{row.AssignmentDetails}</TableCell>
-                  <TableCell>{row.dueDate}</TableCell>
+                  {columns.map(({ name, render }) => {
+                    return (
+                      <TableCell key={name + row.id}>
+                        {render
+                          ? render(row)
+                          : row[name] === "dob"
+                          ? new Date(row[name]).toISOString().split("T")[0]
+                          : row[name]}
+                      </TableCell>
+                    );
+                  })}
 
                   <TableCell>
-                    {/* <input
-                      type="button"
-                      value="edit"
-                      id={row.id}
-                      onClick={(e) => {
-                        onEditClickHandler(row);
-                      }}
-                    /> */}
                     <Actions
                       record={row}
                       onEdit={onEditClickHandler}
@@ -111,7 +119,7 @@ function SimpleTable(props) {
         // open={true}
         handleCancel={onCancelConfirmationDialog}
         handleOk={onOkConfirmationDialog}
-        content={confirmationDialogContent}
+        content={finalConfirmationMessage}
         title={confirmationDialogTitle}
       />
     </Paper>

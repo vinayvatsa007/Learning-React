@@ -31,12 +31,27 @@ class BaseService {
       // new Error({message:error.message, status:error.status})
     }
   };
+
+  //Node Services hosting URL ---- http://localhost:3010/students/1
+  // route=> students/1
+  findById = async (id) => {
+    try {
+      const serviceURL = this.getUrl(`${id}`);
+      // console.log(serviceURL);
+      const resp = await request.get(serviceURL).query();
+      // console.log("findById method results ---", resp);
+      return resp.body;
+    } catch (error) {
+      console.log("Error_from_BaseService.js", error);
+      throw error;
+    }
+  };
   //Node Services hosting URL ---- http://localhost:3010/
   // route=> add/
   insertRecord = async (requestBody) => {
     try {
       const resp = await request.post(this.getUrl("add")).send(requestBody);
-      console.log("find method results ---", resp);
+      console.log("Insert method results ---", resp);
       return resp.body;
     } catch (error) {
       console.log("Error_from_BaseService.js", error);
@@ -48,10 +63,18 @@ class BaseService {
   // route=> update/:id -----http://localhost:3010/assignments/update/46
   updateRecord = async (requestBody, id) => {
     try {
+      delete requestBody.id;
       const resp = await request
         .put(this.getUrl(`update/${id}`))
         .send(requestBody);
-      console.log("updateRecord=>find method results ---", resp);
+      console.log(
+        "updateRecord=> response from service update method ---",
+        resp
+      );
+      console.log(
+        "updateRecord=> resp.body from service update method ---",
+        resp.body
+      );
       return resp.body;
     } catch (error) {
       console.log("updateRecord=>Error_from_BaseService.js", error);

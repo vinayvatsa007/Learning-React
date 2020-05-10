@@ -5,11 +5,11 @@ import Delete from "@material-ui/icons/Delete";
 const Actions = (props) => {
   const { record, onEdit, deleteRecordId, onDelete } = props;
   const onEditHandler = () => {
-    console.log(record);
+    // console.log(record);
     onEdit(record);
   };
   const onDeleteHandler = () => {
-    console.log(deleteRecordId);
+    // console.log(deleteRecordId);
     onDelete(deleteRecordId);
   };
 

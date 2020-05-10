@@ -32,7 +32,14 @@ function ConfirmationDialogRaw(props) {
         {/* Delete Confirmation */}
         {title}
       </DialogTitle>
-      <DialogContent dividers>{content}</DialogContent>
+      <DialogContent dividers>
+        {typeof content == "string"
+          ? content
+          : React.Children.map(content, (item) => item)}
+        {/* content.map((item) => item) */}
+        {/* {React.Children.map(content, (item) => item)} */}
+        {/* {content} */}
+      </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleCancel} color="primary">
           Cancel
