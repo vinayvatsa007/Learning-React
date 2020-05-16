@@ -160,26 +160,22 @@ export default function MiniDrawer(props) {
                 // console.log(path);
               }}
             >
-              {/* <Link to={path}> */}
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
               <ListItemText primary={label} />
-              {/* </Link> */}
+              {/* using link */}
+              {/* <Link to={path}>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={label} />
+              </Link>
+               */}
             </ListItem>
           ))}
         </List>
         <Divider />
-        {/* <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List> */}
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
