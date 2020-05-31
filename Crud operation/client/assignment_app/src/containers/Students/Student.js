@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import StudentService from "../../services/Student";
 import WrapperForm from "./Form/index";
-
 import Table from "../../components/Table";
+import withAuthentication from "../../components/withAuthentication";
 
 const studentService = new StudentService();
 
@@ -113,4 +113,4 @@ const Student = () => {
   );
 };
 
-export default Student;
+export default withAuthentication(Student);

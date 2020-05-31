@@ -8,6 +8,8 @@ import AssignmentForm from "../../components/Form";
 // import TextField from "@material-ui/core/TextField";
 import TextField from "../../components/TextField";
 import DatePicker from "../../components/DatePicker";
+// wrapping with withAuthentication
+import withAuthentication from "../../components/withAuthentication";
 
 const assignmentService = new AssignmentService();
 
@@ -293,4 +295,4 @@ class Assignments extends Component {
   //   }
   // };
 }
-export default withStyles(styles)(Assignments);
+export default withAuthentication(withStyles(styles)(Assignments));

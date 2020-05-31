@@ -17,6 +17,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { useHistory, Link } from "react-router-dom";
 
 const drawerWidth = 240;
@@ -174,6 +175,19 @@ export default function MiniDrawer(props) {
                */}
             </ListItem>
           ))}
+          <ListItem
+            button
+            key={"Logout"}
+            onClick={() => {
+              history.push("/Login");
+              localStorage.clear();
+            }}
+          >
+            <ListItemIcon>
+              <ExitToAppIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Logout"} />
+          </ListItem>
         </List>
         <Divider />
       </Drawer>

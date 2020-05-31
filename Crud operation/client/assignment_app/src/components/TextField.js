@@ -11,6 +11,7 @@ const TextField = (props) => {
     value,
     name,
     onChange,
+    className,
   } = props;
 
   function handleChange(e) {
@@ -18,6 +19,7 @@ const TextField = (props) => {
   }
   return (
     <TxtField
+      className={className}
       autoFocus={autoFocus}
       margin={margin}
       label={label}
