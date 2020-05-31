@@ -35,13 +35,13 @@ const App = () => {
         <Route component={Students} path={"/Students"} />
         {/* its a kind of inline rendering instead of giving component name we telling the route that we rendering a component by its definition/ inline definition */}
         <Route
-          // render={withAuthentication(() => {
-          //   return <h1>"Hello to my default route"</h1>;
-          // })}
-          render={() => {
+          component={withAuthentication(() => {
             return <h1>"Hello to my default route"</h1>;
-          }}
-          path={"/"}
+          })}
+          // render={() => {
+          //   return <h1>"Hello to my default route"</h1>;
+          // }}
+          // path={"/"}
         />
         {/* <Route component={Login} path={"/Login"} /> */}
       </Switch>
